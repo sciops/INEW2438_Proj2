@@ -28,11 +28,13 @@ import sun.util.locale.StringTokenIterator;
 @RestController
 public class WebsiteController {
 
+    //change this filepath to reflect your documents folder
     private final String filepath = "E:\\Users\\home\\Documents\\NetBeansProjects\\" + "INEW2438_Proj2.csv";
     private final AtomicLong counter = new AtomicLong();
 
     //handles all RequestMethod types
     @RequestMapping(value = "/website/test")//, method = RequestMethod.GET
+    //simple method to test Website object creation
     public Website website(
             @RequestParam(value = "cat", defaultValue = "defaultCategory") String category,
             @RequestParam(value = "url", defaultValue = "http://www.example.com") String url
@@ -40,6 +42,8 @@ public class WebsiteController {
         return new Website(counter.incrementAndGet(), category, url);
     }
 
+    //store the given website object into a file
+    //http://localhost:8080/store?cat=categoryHere&url=http://www.example.com
     @RequestMapping(value = "/store")//, method = RequestMethod.GET
     public Website store(
             @RequestParam(value = "cat", defaultValue = "defaultCategory") String category,
@@ -51,23 +55,26 @@ public class WebsiteController {
         return website;
     }
 
+    //file handling submethod. appends new website object to file.
     private void storeWebsite(Website website) throws IOException {
         String record = website.toString();
         File file = new File(filepath);
         boolean newFile = false;
         if (!(file.exists())) {
-            file.createNewFile();
+            file.createNewFile();//create new file if non-existent
             newFile = true;
         }
         FileWriter fw = fw = new FileWriter(file, true);//true for append mode
         BufferedWriter bw = new BufferedWriter(fw);
         if (!(newFile)) {
-            bw.newLine();
+            bw.newLine();//add new line before next record if this is not a new file
         }
         bw.append(record);
         bw.close();
     }
 
+    //retrieve website object by id field. grabs the first matching id without looking for duplicates
+    //http://localhost:8080/grab?id=1
     @RequestMapping(value = "/grab")//, method = RequestMethod.GET
     public Website grab(
             @RequestParam(value = "id", defaultValue = "1") String id_s
@@ -80,6 +87,7 @@ public class WebsiteController {
         return website;
     }
 
+    //file handling submethod for finding the website by id
     private Website grabWebsite(long id) throws FileNotFoundException, IOException {
         FileReader fr = new FileReader(filepath);
         BufferedReader br = new BufferedReader(fr);
@@ -96,6 +104,8 @@ public class WebsiteController {
         return null;
     }
 
+    //show all the websites
+    //http://localhost:8080/list
     @RequestMapping(value = "/list")//, method = RequestMethod.GET
     public String list() throws IOException {
         String output = "";
@@ -103,6 +113,7 @@ public class WebsiteController {
         return output;
     }
 
+    //returned with newline delim between records. view source in browser if it does not display line breaks
     private String grabList() throws FileNotFoundException, IOException {
         FileReader fr = new FileReader(filepath);
         BufferedReader br = new BufferedReader(fr);
