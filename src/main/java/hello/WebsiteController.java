@@ -64,7 +64,7 @@ public class WebsiteController {
             file.createNewFile();//create new file if non-existent
             newFile = true;
         }
-        FileWriter fw = fw = new FileWriter(file, true);//true for append mode
+        FileWriter fw = new FileWriter(file, true);//true for append mode
         BufferedWriter bw = new BufferedWriter(fw);
         if (!(newFile)) {
             bw.newLine();//add new line before next record if this is not a new file
@@ -97,10 +97,12 @@ public class WebsiteController {
             long id_comp = Long.parseLong(st.nextToken());
             String cat = st.nextToken();
             String url = st.nextToken();
-            if (id_comp == id) {
+            if (id_comp == id) {//check if this is the correct id
+                br.close();
                 return new Website(id_comp, cat, url);
             }
-        }
+        }     
+        br.close();
         return null;
     }
 

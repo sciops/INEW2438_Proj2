@@ -8,6 +8,7 @@ package hello;
 /**
  *
  * @author Stephen R. Williams
+ * simple website class per requirements
  */
 public class Website {
 
@@ -31,6 +32,11 @@ public class Website {
 
     public String getUrl() {
         return url;
+    }
+
+    @Override
+    public String toString() {
+        return ""+id + "," + category + "," + url;
     }
     
     

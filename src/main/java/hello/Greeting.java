@@ -1,5 +1,7 @@
 package hello;
 
+//retained model of class for controller
+
 public class Greeting {
 
     private final long id;
