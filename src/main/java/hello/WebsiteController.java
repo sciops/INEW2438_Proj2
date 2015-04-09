@@ -52,7 +52,7 @@ public class WebsiteController {
         //no control for unique id 
         Website website = new Website(counter.incrementAndGet(), category, url);
         storeWebsite(website);
-        return website;
+        return website;//g ok
     }
 
     //file handling submethod. appends new website object to file.
