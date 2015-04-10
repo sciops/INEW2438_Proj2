@@ -13,6 +13,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,19 +92,17 @@ public class WebsiteController {
 
     //file handling submethod for finding the website by id
     private Website grabWebsite(long id) throws FileNotFoundException, IOException {
+        Website website = null;
         FileReader fr = new FileReader(filepath);
         BufferedReader br = new BufferedReader(fr);
         String thisLine = "";
         while ((thisLine = br.readLine()) != null) {
-            StringTokenizer st = new StringTokenizer(thisLine, ",");
-            long id_comp = Long.parseLong(st.nextToken());
-            String cat = st.nextToken();
-            String url = st.nextToken();
-            if (id_comp == id) {//check if this is the correct id
+            website = parseLine(thisLine);
+            if (website.getId() == id) {//check if this is the correct id
                 br.close();
-                return new Website(id_comp, cat, url);
+                return website;
             }
-        }     
+        }
         br.close();
         return null;
     }
@@ -111,19 +112,32 @@ public class WebsiteController {
     @RequestMapping(value = "/list")//, method = RequestMethod.GET
     public String list() throws IOException {
         String output = "";
-        output = grabList();
+        output = grabList().toString();
         return output;
     }
 
     //returned with newline delim between records. view source in browser if it does not display line breaks
-    private String grabList() throws FileNotFoundException, IOException {
+    private List<Website> grabList() throws FileNotFoundException, IOException {
+        List<Website> list = new ArrayList();
+        Website website = null;
         FileReader fr = new FileReader(filepath);
         BufferedReader br = new BufferedReader(fr);
         String thisLine = "", output = "";
         while ((thisLine = br.readLine()) != null) {
-            output += thisLine + "\n";
+            //output += thisLine + "\n";
+            website = parseLine(thisLine);
+            list.add(website);            
         }
-        return output;
+        return list;
+    }
+
+    private Website parseLine(String thisLine) {
+        //System.out.println("Parsing: "+thisLine);
+        StringTokenizer st = new StringTokenizer(thisLine, ",");
+        long id = Long.parseLong(st.nextToken());
+        String cat = st.nextToken();
+        String url = st.nextToken();
+        return new Website(id,cat,url);
     }
 
 }
