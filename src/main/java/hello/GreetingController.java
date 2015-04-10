@@ -17,7 +17,7 @@ public class GreetingController {
     
     // The example does not specify GET vs. PUT, POST, and so forth, because @RequestMapping maps all HTTP operations by default. 
     //Use @RequestMapping(method=GET) to narrow this mapping.
-    //https://spring.io/guides/gs/rest-service/
+    //Reference: https://spring.io/guides/gs/rest-service/
     //http://localhost:8080/greeting
     //http://localhost:8080/greeting?name=Steve
     @RequestMapping("/greeting")
